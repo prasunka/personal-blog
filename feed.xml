@@ -1,20 +1,305 @@
----
----
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="https://www.w3.org/2005/Atom" xmlns:dc="https://purl.org/dc/elements/1.1/">
   <channel>
-    <title>{{ site.name | xml_escape }}</title>
-    <description>{% if site.description %}{{ site.description | xml_escape }}{% endif %}</description>
-    <link>{{ site.url }}</link>
-    <atom:link href="{{ page.path | absolute_url }}" rel="self" type="application/rss+xml" />
-    {% for post in site.posts limit:10 %}
+    <title>PBytes</title>
+    <description></description>
+    <link>http://prasunka.github.io</link>
+    <atom:link href="http://prasunka.github.io/feed.xml" rel="self" type="application/rss+xml" />
+    
       <item>
-        <title>{{ post.title | xml_escape }}</title>
-        <description>{{ post.content | xml_escape | markdownify }}</description>
-        <pubDate>{{ post.date | date_to_rfc822 }}</pubDate>
-        <link>{{ post.url | absolute_url }}</link>
-        <guid isPermaLink="true">{{ post.url | absolute_url }}</guid>
+        <title>GSoC'20 progress : Week 2 &amp; 3</title>
+        <description><p>&lt;h1 id="gsoc-2020-with-kde"&gt;GSoC 2020 with KDE&lt;/h1&gt;</p>
+
+<p>&lt;p&gt;Greetings Reader,&lt;/p&gt;</p>
+
+<p>&lt;p&gt;The coding period began on June 1st. As listed in the previous post, the plan for the first phase is to
+complete the following tasks:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;A script that generates the SQLite DB using blz datafile downloaded from the  &lt;a href="https://www.bundesbank.de/de/aufgaben/unbarer-zahlungsverkehr/serviceangebot/bankleitzahlen/download-bankleitzahlen-602592" title="Deutsche Bundesbank" rel="noreferrer noopener" target="_blank"&gt;Deutsche Bundesbank&lt;/a&gt; :heavy_check_mark:&lt;/li&gt;
+  &lt;li&gt;Modifications in the CMake build system to call this script at build time. :heavy_check_mark:&lt;/li&gt;
+  &lt;li&gt;Replacing the part of code that uses the text datafile with the code that reads from this database.&lt;/li&gt;
+  &lt;li&gt;Updating tests, documentations and benchmark to work with the new database.&lt;/li&gt;
+  &lt;li&gt;Modifying the command-line tool to enable support for user-supplied database.&lt;/li&gt;
+&lt;/ul&gt;</p>
+
+<p>&lt;p&gt;The ticked tasks have been completed till now.&lt;/p&gt;</p>
+
+<p>&lt;h2 id="week-2"&gt;Week 2&lt;/h2&gt;</p>
+
+<p>&lt;p&gt;This week, my main aim was to link the SQLite library to use it in the code and start replacing some
+of the code that does reading from the text file.&lt;/p&gt;</p>
+
+<p>&lt;p&gt;Since, I did not have any previous experience with CMake
+build system, the linking part was a bit of a work. I carefully studied the existing build system to
+figure out how to achieve this. I looked up some of the examples on the internet and tried to fill in the
+gaps from my intuition. &lt;br /&gt;
+Finally, victory! The CMake command ran successfully and the test source file
+executed the SQLite APIs. &lt;br /&gt;&lt;/p&gt;</p>
+
+<p>&lt;p&gt;With that done, now I was ready to write some &lt;strong&gt;C++&lt;/strong&gt;.&lt;/p&gt;</p>
+
+<p>&lt;h2 id="week-3"&gt;Week 3&lt;/h2&gt;</p>
+
+<p>&lt;p&gt;For this, I established the following flow. When the constructor is called,
+it checks the &lt;strong&gt;bankdata_dir&lt;/strong&gt; path to see if the database is present.
+If it is, it calls the method&lt;/p&gt;</p>
+
+<p>&lt;figure class="highlight"&gt;&lt;pre&gt;&lt;code class="language-c–" data-lang="c++"&gt;&lt;span class="kt"&gt;void&lt;/span&gt; &lt;span class="n"&gt;AccountNumberCheck&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="n"&gt;readFile&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;const&lt;/span&gt; &lt;span class="n"&gt;string&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="n"&gt;filename&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;</p>
+
+<p>&lt;p&gt;with the filename. This method establishes the connection with the database and executes a SELECT
+query using &lt;strong&gt;sqlite3_exec()&lt;/strong&gt;.&lt;/p&gt;</p>
+
+<p>&lt;p&gt;Now, there was a problem here.&lt;/p&gt;</p>
+
+<p>&lt;p&gt;The &lt;strong&gt;sqlite3_exec()&lt;/strong&gt; calls a &lt;strong&gt;static&lt;/strong&gt; function at every row of the result obtained from the query passed.
+But, I needed to use the results to insert new &lt;strong&gt;Record&lt;/strong&gt; in the std::map &lt;strong&gt;data&lt;/strong&gt;, which will be used
+for all the checking and finding of bank accounts. But since, these are &lt;strong&gt;members&lt;/strong&gt; of the class, they cannot
+be accessed through a static function.&lt;/p&gt;</p>
+
+<p>&lt;p&gt;After spending a bit of time searching for a solution, I stumbled upon a way that was helpful.
+The trick was to pass the pointer to the current object into the static callback function which will
+cast it into the class pointer and call the required non-static method.
+So, the callback function looks like this:&lt;/p&gt;</p>
+
+<p>&lt;figure class="highlight"&gt;&lt;pre&gt;&lt;code class="language-c–" data-lang="c++"&gt;&lt;span class="kt"&gt;int&lt;/span&gt;
+&lt;span class="n"&gt;AccountNumberCheck&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="n"&gt;callback&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;void&lt;/span&gt; &lt;span class="o"&gt;<em>&lt;/span&gt;&lt;span class="n"&gt;objPtr&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="n"&gt;argc&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kt"&gt;char&lt;/span&gt; &lt;span class="o"&gt;<strong>&lt;/span&gt;&lt;span class="n"&gt;argv&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kt"&gt;char&lt;/span&gt; &lt;span class="o"&gt;</strong>&lt;/span&gt;&lt;span class="n"&gt;azColName&lt;/span&gt;&lt;span class="p"&gt;){&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="n"&gt;AccountNumberCheck&lt;/span&gt; &lt;span class="o"&gt;</em>&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="n"&gt;objPtr&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;-&amp;gt;&lt;/span&gt;&lt;span class="n"&gt;readDatabase&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;argv&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;</p>
+
+<p>&lt;p&gt;The method &lt;strong&gt;AccountNumberCheck::readFile()&lt;/strong&gt; used to read from the text file; I modified it
+to read from the database.&lt;/p&gt;</p>
+
+<p>&lt;figure class="highlight"&gt;&lt;pre&gt;&lt;code class="language-c–" data-lang="c++"&gt;&lt;span class="kt"&gt;int&lt;/span&gt;
+&lt;span class="n"&gt;AccountNumberCheck&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="n"&gt;readDatabase&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;char&lt;/span&gt; &lt;span class="o"&gt;<em>*&lt;/span&gt;&lt;span class="n"&gt;argv&lt;/span&gt;&lt;span class="p"&gt;){&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;isEntryValidToday&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;argv&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;6&lt;/span&gt;&lt;span class="p"&gt;])){&lt;/span&gt;
+        &lt;span class="kt"&gt;char&lt;/span&gt; &lt;span class="o"&gt;</em>&lt;/span&gt;&lt;span class="n"&gt;blz&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="kt"&gt;char&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;BLZ_SIZE&lt;/span&gt; &lt;span class="n"&gt;PLUSONE&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+        &lt;span class="kt"&gt;char&lt;/span&gt; &lt;span class="o"&gt;<em>&lt;/span&gt;&lt;span class="n"&gt;method&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="kt"&gt;char&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;METHOD_SIZE&lt;/span&gt; &lt;span class="n"&gt;PLUSONE&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+        &lt;span class="kt"&gt;char&lt;/span&gt; &lt;span class="o"&gt;</em>&lt;/span&gt;&lt;span class="n"&gt;name&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="kt"&gt;char&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;NAME_SIZE&lt;/span&gt; &lt;span class="n"&gt;PLUSONE&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+        &lt;span class="kt"&gt;char&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;place&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="kt"&gt;char&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;PLACE_SIZE&lt;/span&gt; &lt;span class="n"&gt;PLUSONE&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    &amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;memcpy&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;blz&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;argv&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;[&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;mi&amp;quot;&amp;gt;1&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;],&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;BLZ_SIZE&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;);&amp;lt;/span&amp;gt;
+    &amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;memcpy&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;method&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;argv&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;[&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;mi&amp;quot;&amp;gt;3&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;],&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;METHOD_SIZE&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;);&amp;lt;/span&amp;gt;
+    &amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;memcpy&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;name&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;argv&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;[&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;mi&amp;quot;&amp;gt;4&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;],&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;NAME_SIZE&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;);&amp;lt;/span&amp;gt;
+    &amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;memcpy&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;place&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;argv&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;[&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;mi&amp;quot;&amp;gt;5&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;],&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;PLACE_SIZE&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;);&amp;lt;/span&amp;gt;
+
+    &amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;Record&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;o&amp;quot;&amp;gt;*&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;newRecord&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;o&amp;quot;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;k&amp;quot;&amp;gt;new&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;Record&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;blz&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;method&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;name&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;place&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;);&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;c1&amp;quot;&amp;gt;// Create new record&amp;lt;/span&amp;gt;
+    &amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;data&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;insert&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;data&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;end&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;(),&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;banklist_type&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;o&amp;quot;&amp;gt;::&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;value_type&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;newRecord&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;o&amp;quot;&amp;gt;-&amp;amp;gt;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;bankId&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;,&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;newRecord&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;));&amp;lt;/span&amp;gt;
+
+    &amp;lt;span class=&amp;quot;k&amp;quot;&amp;gt;delete&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;[]&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;blz&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;;&amp;lt;/span&amp;gt;
+    &amp;lt;span class=&amp;quot;k&amp;quot;&amp;gt;delete&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;[]&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;method&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;;&amp;lt;/span&amp;gt;
+    &amp;lt;span class=&amp;quot;k&amp;quot;&amp;gt;delete&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;[]&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;name&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;;&amp;lt;/span&amp;gt;
+    &amp;lt;span class=&amp;quot;k&amp;quot;&amp;gt;delete&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;[]&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;place&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;;&amp;lt;/span&amp;gt;
+&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;}&amp;lt;/span&amp;gt;
+&amp;lt;span class=&amp;quot;k&amp;quot;&amp;gt;return&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;mi&amp;quot;&amp;gt;0&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;;&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;}&amp;lt;/span&amp;gt;&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;&amp;lt;/figure&amp;gt;
+</code></pre></div></div>
+
+<p>&lt;p&gt;Here, the &lt;strong&gt;isEntryValidToday()&lt;/strong&gt; method is used to compare the value of &lt;strong&gt;valid_upto&lt;/strong&gt; field with today’s
+date.&lt;/p&gt;</p>
+
+<p>&lt;figure class="highlight"&gt;&lt;pre&gt;&lt;code class="language-c–" data-lang="c++"&gt;&lt;span class="k"&gt;static&lt;/span&gt; &lt;span class="kt"&gt;bool&lt;/span&gt; &lt;span class="nf"&gt;isEntryValidToday&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;char&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;valid_upto&lt;/span&gt;&lt;span class="p"&gt;){&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;valid_upto&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="nb"&gt;NULL&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nb"&gt;true&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;std&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;o&amp;quot;&amp;gt;::&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;kt&amp;quot;&amp;gt;time_t&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;now&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;o&amp;quot;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;time&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;mi&amp;quot;&amp;gt;0&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;);&amp;lt;/span&amp;gt;
+&amp;lt;span class=&amp;quot;k&amp;quot;&amp;gt;struct&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;nc&amp;quot;&amp;gt;tm&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;t_struct&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;;&amp;lt;/span&amp;gt;
+&amp;lt;span class=&amp;quot;kt&amp;quot;&amp;gt;char&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;today&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;[&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;mi&amp;quot;&amp;gt;20&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;];&amp;lt;/span&amp;gt;
+&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;t_struct&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;o&amp;quot;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;o&amp;quot;&amp;gt;*&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;localtime&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;o&amp;quot;&amp;gt;&amp;amp;amp;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;now&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;);&amp;lt;/span&amp;gt;
+&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;strftime&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;today&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;,&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;k&amp;quot;&amp;gt;sizeof&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;today&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;),&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;s&amp;quot;&amp;gt;&amp;quot;%Y-%m-%d&amp;quot;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;,&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;o&amp;quot;&amp;gt;&amp;amp;amp;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;t_struct&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;);&amp;lt;/span&amp;gt;
+
+&amp;lt;span class=&amp;quot;k&amp;quot;&amp;gt;if&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;strcmp&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;today&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;valid_upto&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;)&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;o&amp;quot;&amp;gt;&amp;amp;gt;&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;mi&amp;quot;&amp;gt;0&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;)&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;k&amp;quot;&amp;gt;return&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;nb&amp;quot;&amp;gt;false&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;;&amp;lt;/span&amp;gt;
+
+&amp;lt;span class=&amp;quot;k&amp;quot;&amp;gt;return&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;nb&amp;quot;&amp;gt;true&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;;&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;}&amp;lt;/span&amp;gt;&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;&amp;lt;/figure&amp;gt;
+</code></pre></div></div>
+
+<p>&lt;p&gt;The SELECT query that I passed, extracts the date in the format &lt;strong&gt;YYYY-MM-DD&lt;/strong&gt; so to compare it with today,
+I formatted today’s date in the same format, after which they could be compared simply using &lt;strong&gt;strcmp()&lt;/strong&gt;.&lt;/p&gt;</p>
+
+<p>&lt;p&gt;After a few more additions and changes, the code was successfully reading from the database and working well
+with the tests. However, the CTest &lt;strong&gt;benchmark&lt;/strong&gt; fails due to incompatibility with the new code.
+So, next week’s plan is to fix this and make changes to the command-line tool to enable support for user-supplied
+database.&lt;/p&gt;</p>
+
+<p>&lt;p&gt;See you in the next post.&lt;/p&gt;</p>
+
+<p>&lt;p&gt;:wave:&lt;br /&gt;
+Prasun.&lt;/p&gt;</p>
+
+</description>
+        <pubDate>Mon, 22 Jun 2020 00:00:00 +0530</pubDate>
+        <link>http://prasunka.github.io/posts/gsoc2020-week-2-3</link>
+        <guid isPermaLink="true">http://prasunka.github.io/posts/gsoc2020-week-2-3</guid>
       </item>
-    {% endfor %}
+    
+      <item>
+        <title>GSoC'20 progress : Week 1</title>
+        <description><p>&lt;h1 id="gsoc-2020-with-kde"&gt;GSoC 2020 with KDE&lt;/h1&gt;</p>
+
+<p>&lt;p&gt;Greetings Reader,&lt;/p&gt;</p>
+
+<p>&lt;p&gt;The coding period began on June 1st. The plan for the first phase is to
+complete the following tasks:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;A script that generates the SQLite DB using blz datafile downloaded from the  &lt;a href="https://www.bundesbank.de/de/aufgaben/unbarer-zahlungsverkehr/serviceangebot/bankleitzahlen/download-bankleitzahlen-602592" title="Deutsche Bundesbank" rel="noreferrer noopener" target="_blank"&gt;Deutsche Bundesbank&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;Modifications in the CMake build system to call this script at build time.&lt;/li&gt;
+  &lt;li&gt;Replacing the part of code that uses the text datafile with the code that reads from this database.&lt;/li&gt;
+  &lt;li&gt;Updating tests, documentations and benchmark to work with the new database.&lt;/li&gt;
+  &lt;li&gt;Modifying the command-line tool to enable support for user-supplied database.&lt;/li&gt;
+&lt;/ul&gt;</p>
+
+<p>&lt;h2 id="week-1"&gt;Week 1&lt;/h2&gt;</p>
+
+<p>&lt;p&gt;The first work for this week was to write a python script to generate the database using the bank data file.&lt;br /&gt;
+As the work progressed, the first challenge revealed itself.
+The thing is, currently, the program downloads the currently valid bankdata at every build. So, the data
+is always read from the latest file. Now, when a single database will be used, the database needs to keep
+track of the deleted entries and update only the deleted and added entries. Another solution was to
+regenerate the database from scratch everytime, but that would have lead to loss of information of the
+deleted entries.&lt;br /&gt;&lt;/p&gt;</p>
+
+<p>&lt;p&gt;To keep track of this date upto which the entries
+are valid, I proposed to add another field in the database named &lt;strong&gt;valid_upto&lt;/strong&gt;. This &lt;strong&gt;valid_upto&lt;/strong&gt; field will be
+filled if during any data update the datafile from the bank marks it deleted.
+&lt;br /&gt;&lt;/p&gt;</p>
+
+<p>&lt;p&gt;Another problem was to how to get this date. The bank does not include any date info in the file.
+I was stuck on this for a day. But I figured it out eventually. I used the CMake &lt;strong&gt;REGEX MATCH&lt;/strong&gt; command on the
+website source file to extract this date. Figuring out the regex took some time. CMake regex is weird and the
+documentation is very limited. The web was not being much of a help. But, got through. Success at last, when I ran
+cmake and the date finally printed on the terminal!&lt;br /&gt;&lt;/p&gt;</p>
+
+<p>&lt;blockquote&gt;
+  &lt;p&gt;The complete python script could be found &lt;a href="https://sourceforge.net/u/prasun/ktoblzcheck-gsoc2020/ci/master/tree/src/bankdata/update-database.py" title="python script" rel="noreferrer noopener" target="_blank"&gt;here&lt;/a&gt;.&lt;br /&gt;&lt;/p&gt;
+&lt;/blockquote&gt;</p>
+
+<p>&lt;p&gt;To ensure that the database is not generated from scatch at every build, I used this method to check for the DB
+in the output path.&lt;/p&gt;</p>
+
+<p>&lt;figure class="highlight"&gt;&lt;pre&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;existDB&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;file&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="s"&gt;""" Checks if the database file already exists
+    """&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="ow"&gt;not&lt;/span&gt; &lt;span class="n"&gt;isfile&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;file&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="bp"&gt;False&lt;/span&gt;</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&amp;lt;span class=&amp;quot;k&amp;quot;&amp;gt;if&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;getsize&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;nb&amp;quot;&amp;gt;file&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;)&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;o&amp;quot;&amp;gt;&amp;amp;lt;&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;mi&amp;quot;&amp;gt;100&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;:&amp;lt;/span&amp;gt;
+    &amp;lt;span class=&amp;quot;k&amp;quot;&amp;gt;return&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;bp&amp;quot;&amp;gt;False&amp;lt;/span&amp;gt;
+
+&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;db&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;o&amp;quot;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;nb&amp;quot;&amp;gt;open&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;nb&amp;quot;&amp;gt;file&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;s&amp;quot;&amp;gt;'rb'&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;)&amp;lt;/span&amp;gt;
+&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;header&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;o&amp;quot;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;db&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;read&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;mi&amp;quot;&amp;gt;100&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;)&amp;lt;/span&amp;gt;
+&amp;lt;span class=&amp;quot;k&amp;quot;&amp;gt;if&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;header&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;startswith&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;s&amp;quot;&amp;gt;b'SQLite format 3'&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;):&amp;lt;/span&amp;gt;
+    &amp;lt;span class=&amp;quot;k&amp;quot;&amp;gt;return&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;bp&amp;quot;&amp;gt;True&amp;lt;/span&amp;gt;
+
+&amp;lt;span class=&amp;quot;k&amp;quot;&amp;gt;return&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;bp&amp;quot;&amp;gt;False&amp;lt;/span&amp;gt;&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;&amp;lt;/figure&amp;gt;
+</code></pre></div></div>
+
+<p>&lt;p&gt;I created two methods to add and update entries to the database.&lt;/p&gt;</p>
+
+<p>&lt;figure class="highlight"&gt;&lt;pre&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span class="n"&gt;submitInstitute&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;bankCode&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;method&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;bankName&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;bic&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;location&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;</p>
+
+<p>&lt;p&gt;This is used for inserting an entry into the database. For such entries, no &lt;strong&gt;valid_upto&lt;/strong&gt;
+value is given. So, &lt;strong&gt;NULL&lt;/strong&gt; is inserted in its place.&lt;/p&gt;</p>
+
+<p>&lt;figure class="highlight"&gt;&lt;pre&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span class="n"&gt;deleteInstitute&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;oldBankCode&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;newBankCode&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;method&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;bankName&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;bic&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;location&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;valid_upto&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;</p>
+
+<p>&lt;p&gt;This method updates the entry corresponding to the &lt;strong&gt;oldBankCode&lt;/strong&gt; and sets the &lt;strong&gt;valid_upto&lt;/strong&gt; field.
+It then checks if the &lt;strong&gt;newBankCode&lt;/strong&gt; is a valid entry and if positive creates a new entry.&lt;/p&gt;</p>
+
+<p>&lt;p&gt;After finishing the python script, I worked on the CMake files to handle the database generation.
+A lot of small changes here and there and the work of Week 1 was completed successfully.&lt;/p&gt;</p>
+
+<p>&lt;p&gt;The database generates on build time with expected values. Now, on to the part to actually using it.&lt;/p&gt;</p>
+
+<p>&lt;p&gt;See you in the next post.&lt;/p&gt;</p>
+
+<p>&lt;p&gt;:wave:&lt;br /&gt;
+Prasun.&lt;/p&gt;</p>
+
+</description>
+        <pubDate>Wed, 10 Jun 2020 00:00:00 +0530</pubDate>
+        <link>http://prasunka.github.io/posts/gsoc2020-week-1</link>
+        <guid isPermaLink="true">http://prasunka.github.io/posts/gsoc2020-week-1</guid>
+      </item>
+    
+      <item>
+        <title>GSoC 2020 with KDE</title>
+        <description><p>&lt;h2 id="gsoc-2020-with-kde"&gt;GSoC 2020 with KDE&lt;/h2&gt;</p>
+
+<p>&lt;p&gt;The day was the 4th of May. As the hours were passing, some anxiousness
+was settling in. I was waiting for the announcement of the list of accepted
+projects for Google Summer of Code 2020. It had been one month and four days
+of waiting since proposal submission and it was time to face the results.&lt;/p&gt;</p>
+
+<p>&lt;p&gt;As the moment arrived, it brought with itself the good news. My project was
+accepted by the KDE community and I was given a chance to work with one of
+the largest active free software communities :)&lt;/p&gt;</p>
+
+<p>&lt;p&gt;&lt;a href="/assets/kde-logo-30b0467acde50793509aa68224c058f761cf6ad922a78bd0598f33b2e0ba5841.png"&gt;
+  &lt;img src="/assets/kde-logo-30b0467acde50793509aa68224c058f761cf6ad922a78bd0598f33b2e0ba5841.png" alt="KDE" class="zooming" data-rjs="/assets/kde-logo-30b0467acde50793509aa68224c058f761cf6ad922a78bd0598f33b2e0ba5841.png" data-zooming-width="512" data-zooming-height="512" /&gt;
+&lt;/a&gt;&lt;/p&gt;</p>
+
+<p>&lt;h3 id="about-the-project"&gt;About the Project&lt;/h3&gt;</p>
+
+<p>&lt;p&gt;KtoBLZCheck is a library to check bank account numbers and bank codes
+(BLZ) of German Banks and other international banks. Currently, KtoBLZCheck
+uses multiple bankdata files in text format which are
+valid at different dates. The data which is regularly retrieved from ​Deutsche
+Bundesbank is valid for three months. This leads to a lot of duplication of data.&lt;br /&gt;
+The idea is to integrate the support for query and generation of SQLite
+databases into KtoBLZCheck to replace the text files used currently. This will
+avoid duplicate data and enable the support for multiple countries improving
+the scope of this library.&lt;br /&gt;
+Another task is to create an API for querying these databases, so as to integrate
+these databases into other applications.&lt;br /&gt;
+The database would also need to be updated on demand so that the applications can
+be sure about the results. An API for checking and downloading these updates
+would also be implemented. &lt;br /&gt;&lt;/p&gt;</p>
+
+<p>&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;Mentors&lt;/strong&gt; : Ralf Habacker, Thomas Baumgart, Ingo Klöcker&lt;/p&gt;
+&lt;/blockquote&gt;</p>
+
+<p>&lt;h3 id="community-bonding-period"&gt;Community Bonding period&lt;/h3&gt;</p>
+
+<p>&lt;p&gt;This month was spent on ironing out the details of the project. With the help of
+my mentors, I became aware of the possible challenges and started to search for the
+possible solutions to figure out a plan for the first phase of the project.&lt;/p&gt;</p>
+
+<p>&lt;p&gt;This was also the time to meet my fellow students who were participating in this
+program. It was a remarkable experience, interacting with them and talking about
+our GSoC projects. I met a lot of talented people here and we hope to be in touch
+even after the program ends.&lt;/p&gt;</p>
+
+<p>&lt;h3 id="whats-next"&gt;What’s Next?&lt;/h3&gt;</p>
+
+<p>&lt;p&gt;Currently, this is the Community Bonding period of Google Summer of Code.
+This will last till June 1. After this, coding will officially begin.
+I am in regular contact with my mentors and I have finalised the details
+of the initial work. On the suggestions of my mentors, I have added another
+subtask of creating an API for fetching datafiles from the web.&lt;/p&gt;</p>
+
+<p>&lt;p&gt;I plan to start my work as soon as the coding period begins and will be updating
+my progress on this project during this period through this blog and my KDE GSoC
+status report page.&lt;/p&gt;</p>
+
+<p>&lt;p&gt;I thank the KDE community for selecting my proposal as a project for Google Summer of Code.
+I am super excited to work on this project and learn about software development from my mentors
+and the community. This is the first time I will be working so close with an open-source
+organisation. &lt;br /&gt;
+I look forward to working and learning a lot in the next three months.&lt;/p&gt;</p>
+
+<p>&lt;h3 id="about-me"&gt;About me&lt;/h3&gt;</p>
+
+<p>&lt;p&gt;I am Prasun Kumar, a student of Indian Institute of Information Technology,
+Guwahati (Assam, India). I am in my 2nd year (4th) semester of Bachelor in
+Technology in Computer Science and Engineering.&lt;/p&gt;</p>
+
+<p>&lt;ul&gt;
+  &lt;li&gt;My KDE status report page: &lt;a href="https://community.kde.org/GSoC/2020/StatusReports/PrasunKumar"&gt;Status Report&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;My GSoC Proposal : &lt;a href="https://docs.google.com/document/d/1pMM0cUlPNpzWzlfEZ7XKcHTwJC73EYiYbLoQJRT7Jpc/"&gt;Proposal&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</p>
+</description>
+        <pubDate>Sat, 30 May 2020 00:00:00 +0530</pubDate>
+        <link>http://prasunka.github.io/posts/gsoc2020-community-bonding</link>
+        <guid isPermaLink="true">http://prasunka.github.io/posts/gsoc2020-community-bonding</guid>
+      </item>
+    
   </channel>
 </rss>

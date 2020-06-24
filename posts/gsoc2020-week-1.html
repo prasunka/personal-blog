@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>PBytes | GSoC'20 progress : Week 1</title>
+  <meta name="description" content="Progress during the first week of the coding period">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="GSoC&#39;20 progress : Week 1">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="http://prasunka.github.io/posts/gsoc2020-week-1">
+  <meta property="og:description" content="Progress during the first week of the coding period">
+  <meta property="og:site_name" content="PBytes">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:url" content="http://prasunka.github.io/posts/gsoc2020-week-1">
+  <meta name="twitter:title" content="GSoC&#39;20 progress : Week 1">
+  <meta name="twitter:description" content="Progress during the first week of the coding period">
+
+  
+    <meta property="og:image" content="http://prasunka.github.io/assets/og-image-ee46bbc61b334e821e81534b1fd43f3fee6f020ec174b3c2114445695fd48c01.jpg">
+    <meta name="twitter:image" content="http://prasunka.github.io/assets/og-image-ee46bbc61b334e821e81534b1fd43f3fee6f020ec174b3c2114445695fd48c01.jpg">
+  
+
+  <link href="http://prasunka.github.io/feed.xml" type="application/rss+xml" rel="alternate" title="PBytes Last 10 blog posts" />
+
+  
+
+  
+
+    
+      <link rel="icon" type="image/x-icon" href="/assets/favicon-92c496ca24aae9e64ca0b4505a39a0b8267a63c9992fe307ff5047aca4e8b720.ico">
+      <link rel="apple-touch-icon" href="/assets/apple-touch-icon-dark-d161409442b7e523089f24d08d0a55951549ece7504207c376d53b020713494d.png">
+      <link rel="stylesheet" type="text/css" title="light" id="light" href="/assets/light-bb1553a18d0f1ccfe1aabc010584c49b4277a88503216b78906ba719e30019c1.css">
+      <link rel="stylesheet" type="text/css" title="dark" id="dark" href="/assets/dark-831218bc9e41aef39ee6a0bae4501195bccafcc13101ae2b9cd20493a6ec04c0.css" disabled="false">
+    
+
+  
+
+</head>
+
+<body>
+  <main>
+    <div class="grid grid-centered">
+      <div class="grid-cell">
+        <nav class="header-nav ">
+  <a href="/" class="header-logo" title="PBytes">PBytes</a>
+  <ul class="header-links">
+    
+      <li>
+        <a href="/about" title="About me">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon-about">
+  <use href="/assets/about-ecf154b571ab8034ae00aeed91a3b7ad68db80b46d958753ad6216c919486e88.svg#icon-about" xlink:href="/assets/about-ecf154b571ab8034ae00aeed91a3b7ad68db80b46d958753ad6216c919486e88.svg#icon-about"></use>
+</svg>
+
+        </a>
+      </li>
+    
+    
+      <li>
+        <a href="https://twitter.com/_prasunkr_" rel="noreferrer noopener" target="_blank" title="Twitter">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon-twitter">
+  <use href="/assets/twitter-8842c33965263ad1b03a978406826677a668f94125d5837e70ab83f24b3213a7.svg#icon-twitter" xlink:href="/assets/twitter-8842c33965263ad1b03a978406826677a668f94125d5837e70ab83f24b3213a7.svg#icon-twitter"></use>
+</svg>
+
+        </a>
+      </li>
+    
+    
+    
+    
+      <li>
+        <a href="https://github.com/prasunka" rel="noreferrer noopener" target="_blank" title="GitHub">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon-github">
+  <use href="/assets/github-094f81040819f34343ee6ffff0980f17e2807b08b595eaaf66ae3554934fd78d.svg#icon-github" xlink:href="/assets/github-094f81040819f34343ee6ffff0980f17e2807b08b595eaaf66ae3554934fd78d.svg#icon-github"></use>
+</svg>
+
+        </a>
+      </li>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+      <li>
+        <a href="mailto:prasun.code@gmail.com" title="Email">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon-email">
+  <use href="/assets/email-782473193bf750036fdb90e8daa075508a20509d01854c09f3237c144a3f0601.svg#icon-email" xlink:href="/assets/email-782473193bf750036fdb90e8daa075508a20509d01854c09f3237c144a3f0601.svg#icon-email"></use>
+</svg>
+
+        </a>
+      </li>
+    
+    
+      <li>
+        <a href="/feed.xml" rel="noreferrer noopener" target="_blank" title="RSS">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon-rss">
+  <use href="/assets/rss-541ec5cea9cefd10d2fcfec01888f3f231a8829940249835fa7b7b3a12ae0d0d.svg#icon-rss" xlink:href="/assets/rss-541ec5cea9cefd10d2fcfec01888f3f231a8829940249835fa7b7b3a12ae0d0d.svg#icon-rss"></use>
+</svg>
+
+        </a>
+      </li>
+    
+    
+      <li>
+        <a onclick="toggle()" title="Toggle Theme">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon-theme">
+  <use href="/assets/theme-66869e0bf8dab34bae1c86bda400327b772e0be69e8dc28d3ede896e771320ed.svg#icon-theme" xlink:href="/assets/theme-66869e0bf8dab34bae1c86bda400327b772e0be69e8dc28d3ede896e771320ed.svg#icon-theme"></use>
+</svg>
+
+        </a>
+      </li>
+    
+  </ul>
+</nav>
+
+
+
+        <article class="article ">
+          <header class="article-header">
+            <h1>GSoC'20 progress : Week 1</h1>
+            <p>Progress during the first week of the coding period</p>
+            <div class="article-list-footer">
+  <span class="article-list-date">
+    June 10, 2020
+  </span>
+  <span class="article-list-divider">-</span>
+  <span class="article-list-minutes">
+    
+    
+      3 minute read
+    
+  </span>
+  <span class="article-list-divider">-</span>
+  <div class="article-list-tags">
+    
+      
+      <a href="/tag/gsoc" title="See all posts with tag 'GSoC 2020'">GSoC 2020</a>
+    
+      
+      <a href="/tag/kde" title="See all posts with tag 'KDE'">KDE</a>
+    
+  </div>
+</div>
+          </header>
+
+          <div class="article-content">
+            <h1 id="gsoc-2020-with-kde">GSoC 2020 with KDE</h1>
+
+<p>Greetings Reader,</p>
+
+<p>The coding period began on June 1st. The plan for the first phase is to
+complete the following tasks:</p>
+<ul>
+  <li>A script that generates the SQLite DB using blz datafile downloaded from the  <a href="https://www.bundesbank.de/de/aufgaben/unbarer-zahlungsverkehr/serviceangebot/bankleitzahlen/download-bankleitzahlen-602592" title="Deutsche Bundesbank" rel="noreferrer noopener" target="_blank">Deutsche Bundesbank</a>
+</li>
+  <li>Modifications in the CMake build system to call this script at build time.</li>
+  <li>Replacing the part of code that uses the text datafile with the code that reads from this database.</li>
+  <li>Updating tests, documentations and benchmark to work with the new database.</li>
+  <li>Modifying the command-line tool to enable support for user-supplied database.</li>
+</ul>
+
+<h2 id="week-1">Week 1</h2>
+
+<p>The first work for this week was to write a python script to generate the database using the bank data file.<br>
+As the work progressed, the first challenge revealed itself.
+The thing is, currently, the program downloads the currently valid bankdata at every build. So, the data
+is always read from the latest file. Now, when a single database will be used, the database needs to keep
+track of the deleted entries and update only the deleted and added entries. Another solution was to
+regenerate the database from scratch everytime, but that would have lead to loss of information of the
+deleted entries.<br></p>
+
+<p>To keep track of this date upto which the entries
+are valid, I proposed to add another field in the database named <strong>valid_upto</strong>. This <strong>valid_upto</strong> field will be
+filled if during any data update the datafile from the bank marks it deleted.
+<br></p>
+
+<p>Another problem was to how to get this date. The bank does not include any date info in the file.
+I was stuck on this for a day. But I figured it out eventually. I used the CMake <strong>REGEX MATCH</strong> command on the
+website source file to extract this date. Figuring out the regex took some time. CMake regex is weird and the
+documentation is very limited. The web was not being much of a help. But, got through. Success at last, when I ran
+cmake and the date finally printed on the terminal!<br></p>
+
+<blockquote>
+  <p>The complete python script could be found <a href="https://sourceforge.net/u/prasun/ktoblzcheck-gsoc2020/ci/master/tree/src/bankdata/update-database.py" title="python script" rel="noreferrer noopener" target="_blank">here</a>.<br></p>
+</blockquote>
+
+<p>To ensure that the database is not generated from scatch at every build, I used this method to check for the DB
+in the output path.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">existDB</span><span class="p">(</span><span class="nb">file</span><span class="p">):</span>
+    <span class="s">""" Checks if the database file already exists
+    """</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">isfile</span><span class="p">(</span><span class="nb">file</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">False</span>
+
+    <span class="k">if</span> <span class="n">getsize</span><span class="p">(</span><span class="nb">file</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">False</span>
+
+    <span class="n">db</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span><span class="s">'rb'</span><span class="p">)</span>
+    <span class="n">header</span> <span class="o">=</span> <span class="n">db</span><span class="p">.</span><span class="n">read</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">header</span><span class="p">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">b'SQLite format 3'</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">True</span>
+
+    <span class="k">return</span> <span class="bp">False</span></code></pre></figure>
+
+<p>I created two methods to add and update entries to the database.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">submitInstitute</span><span class="p">(</span><span class="n">bankCode</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">bankName</span><span class="p">,</span> <span class="n">bic</span><span class="p">,</span> <span class="n">location</span><span class="p">)</span></code></pre></figure>
+
+<p>This is used for inserting an entry into the database. For such entries, no <strong>valid_upto</strong>
+value is given. So, <strong>NULL</strong> is inserted in its place.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">deleteInstitute</span><span class="p">(</span><span class="n">oldBankCode</span><span class="p">,</span> <span class="n">newBankCode</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">bankName</span><span class="p">,</span> <span class="n">bic</span><span class="p">,</span> <span class="n">location</span><span class="p">,</span> <span class="n">valid_upto</span><span class="p">)</span></code></pre></figure>
+
+<p>This method updates the entry corresponding to the <strong>oldBankCode</strong> and sets the <strong>valid_upto</strong> field.
+It then checks if the <strong>newBankCode</strong> is a valid entry and if positive creates a new entry.</p>
+
+<p>After finishing the python script, I worked on the CMake files to handle the database generation.
+A lot of small changes here and there and the work of Week 1 was completed successfully.</p>
+
+<p>The database generates on build time with expected values. Now, on to the part to actually using it.</p>
+
+<p>See you in the next post.</p>
+
+<p><img class="emoji" title=":wave:" alt=":wave:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f44b.png" height="20" width="20"><br>
+Prasun.</p>
+
+
+          </div>
+          <div class="article-share">
+            
+            
+            <a href="https://twitter.com/home?status=GSoC'20+progress+:+Week+1%20-%20http://prasunka.github.io/posts/gsoc2020-week-1%20by%20@_prasunkr_" title="Share on Twitter" rel="noreferrer noopener" target="_blank">
+              <svg viewbox="0 0 512 512"><path d="M492 109.5c-17.4 7.7-36 12.9-55.6 15.3 20-12 35.4-31 42.6-53.6 -18.7 11.1-39.4 19.2-61.5 23.5C399.8 75.8 374.6 64 346.8 64c-53.5 0-96.8 43.4-96.8 96.9 0 7.6 0.8 15 2.5 22.1 -80.5-4-151.9-42.6-199.6-101.3 -8.3 14.3-13.1 31-13.1 48.7 0 33.6 17.2 63.3 43.2 80.7C67 210.7 52 206.3 39 199c0 0.4 0 0.8 0 1.2 0 47 33.4 86.1 77.7 95 -8.1 2.2-16.7 3.4-25.5 3.4 -6.2 0-12.3-0.6-18.2-1.8 12.3 38.5 48.1 66.5 90.5 67.3 -33.1 26-74.9 41.5-120.3 41.5 -7.8 0-15.5-0.5-23.1-1.4C62.8 432 113.7 448 168.3 448 346.6 448 444 300.3 444 172.2c0-4.2-0.1-8.4-0.3-12.5C462.6 146 479 129 492 109.5z"></path></svg>
+            </a>
+            <a href="https://www.facebook.com/sharer/sharer.php?u=http://prasunka.github.io/posts/gsoc2020-week-1" title="Share on Facebook" rel="noreferrer noopener" target="_blank">
+              <svg viewbox="0 0 512 512"><path d="M288 192v-38.1c0-17.2 3.8-25.9 30.5-25.9H352V64h-55.9c-68.5 0-91.1 31.4-91.1 85.3V192h-45v64h45v192h83V256h56.4l7.6-64H288z"></path></svg>
+            </a>
+          </div>
+
+          
+        </article>
+        <footer class="footer ">
+  <p>
+    © 2020 Prasun Kumar    |   Powered by <a href="https://github.com/nielsenramon/chalk" rel="noreferrer noopener" target="_blank" title="Chalk">Chalk</a>.
+  </p>
+</footer>
+
+      </div>
+    </div>
+  </main>
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-170264271-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-170264271-1');
+  </script>
+
+
+<script src="/assets/vendor-130c9c254effc51f3283620bc635851da7b99c20901216948f11ba72ee13317f.js" type="text/javascript"></script>
+
+
+  <script src="/assets/webfonts-96493456d319d1bf419afdf8701552d4d486fee6afd304897d4fd81eb4e0cc0b.js" type="text/javascript"></script>
+
+
+
+
+<script src="/assets/application-cfde13ac81ddaf4351b2e739603e2baf688d0fcc9aba613fe62bbb1c7b037fb9.js" type="text/javascript"></script>
+
+
+  <script src="/assets/themetoggle-df0d3d73164dc26dffbd630182ae4d0dfa7bee6b694a2b5d565d73595b582bbf.js" type="text/javascript"></script>
+
+</body>
+</html>
