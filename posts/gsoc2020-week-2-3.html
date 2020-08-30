@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>PBytes | GSoC'20 progress : Week 2 & 3</title>
+  <meta name="description" content="Progress during the second and third week of the coding period">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="GSoC&#39;20 progress : Week 2 &amp; 3">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="http://prasunka.github.io/posts/gsoc2020-week-2-3">
+  <meta property="og:description" content="Progress during the second and third week of the coding period">
+  <meta property="og:site_name" content="PBytes">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:url" content="http://prasunka.github.io/posts/gsoc2020-week-2-3">
+  <meta name="twitter:title" content="GSoC&#39;20 progress : Week 2 &amp; 3">
+  <meta name="twitter:description" content="Progress during the second and third week of the coding period">
+
+  
+    <meta property="og:image" content="http://prasunka.github.io/assets/og-image-ee46bbc61b334e821e81534b1fd43f3fee6f020ec174b3c2114445695fd48c01.jpg">
+    <meta name="twitter:image" content="http://prasunka.github.io/assets/og-image-ee46bbc61b334e821e81534b1fd43f3fee6f020ec174b3c2114445695fd48c01.jpg">
+  
+
+  <link href="http://prasunka.github.io/feed.xml" type="application/rss+xml" rel="alternate" title="PBytes Last 10 blog posts" />
+
+  
+
+  
+
+    
+      <link rel="icon" type="image/x-icon" href="/assets/favicon-92c496ca24aae9e64ca0b4505a39a0b8267a63c9992fe307ff5047aca4e8b720.ico">
+      <link rel="apple-touch-icon" href="/assets/apple-touch-icon-dark-d161409442b7e523089f24d08d0a55951549ece7504207c376d53b020713494d.png">
+      <link rel="stylesheet" type="text/css" title="light" id="light" href="/assets/light-fcb7a108ad86f7ba6e488841f0a6dfc46758d026e79cfa24fd59bb0be52e96f8.css">
+      <link rel="stylesheet" type="text/css" title="dark" id="dark" href="/assets/dark-9e48b67b0791dd42634fc1806ebcfe4a6f9740554bbcdf992e21bd0fdbd5395d.css" disabled="false">
+    
+
+  
+
+</head>
+
+<body>
+  <main>
+    <div class="grid grid-centered">
+      <div class="grid-cell">
+        <nav class="header-nav ">
+  <a href="/" class="header-logo" title="PBytes">PBytes</a>
+  <ul class="header-links">
+    
+      <li>
+        <a href="/about" title="About me">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon-about">
+  <use href="/assets/about-ecf154b571ab8034ae00aeed91a3b7ad68db80b46d958753ad6216c919486e88.svg#icon-about" xlink:href="/assets/about-ecf154b571ab8034ae00aeed91a3b7ad68db80b46d958753ad6216c919486e88.svg#icon-about"></use>
+</svg>
+
+        </a>
+      </li>
+    
+    
+      <li>
+        <a href="https://twitter.com/_prasunkr_" rel="noreferrer noopener" target="_blank" title="Twitter">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon-twitter">
+  <use href="/assets/twitter-8842c33965263ad1b03a978406826677a668f94125d5837e70ab83f24b3213a7.svg#icon-twitter" xlink:href="/assets/twitter-8842c33965263ad1b03a978406826677a668f94125d5837e70ab83f24b3213a7.svg#icon-twitter"></use>
+</svg>
+
+        </a>
+      </li>
+    
+    
+    
+    
+      <li>
+        <a href="https://github.com/prasunka" rel="noreferrer noopener" target="_blank" title="GitHub">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon-github">
+  <use href="/assets/github-094f81040819f34343ee6ffff0980f17e2807b08b595eaaf66ae3554934fd78d.svg#icon-github" xlink:href="/assets/github-094f81040819f34343ee6ffff0980f17e2807b08b595eaaf66ae3554934fd78d.svg#icon-github"></use>
+</svg>
+
+        </a>
+      </li>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+      <li>
+        <a href="mailto:prasun.code@gmail.com" title="Email">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon-email">
+  <use href="/assets/email-782473193bf750036fdb90e8daa075508a20509d01854c09f3237c144a3f0601.svg#icon-email" xlink:href="/assets/email-782473193bf750036fdb90e8daa075508a20509d01854c09f3237c144a3f0601.svg#icon-email"></use>
+</svg>
+
+        </a>
+      </li>
+    
+    
+      <li>
+        <a href="/feed.xml" rel="noreferrer noopener" target="_blank" title="RSS">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon-rss">
+  <use href="/assets/rss-541ec5cea9cefd10d2fcfec01888f3f231a8829940249835fa7b7b3a12ae0d0d.svg#icon-rss" xlink:href="/assets/rss-541ec5cea9cefd10d2fcfec01888f3f231a8829940249835fa7b7b3a12ae0d0d.svg#icon-rss"></use>
+</svg>
+
+        </a>
+      </li>
+    
+    
+      <li>
+        <a onclick="toggle()" title="Toggle Theme">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon-theme">
+  <use href="/assets/theme-66869e0bf8dab34bae1c86bda400327b772e0be69e8dc28d3ede896e771320ed.svg#icon-theme" xlink:href="/assets/theme-66869e0bf8dab34bae1c86bda400327b772e0be69e8dc28d3ede896e771320ed.svg#icon-theme"></use>
+</svg>
+
+        </a>
+      </li>
+    
+  </ul>
+</nav>
+
+
+
+        <article class="article ">
+          <header class="article-header">
+            <h1>GSoC'20 progress : Week 2 &amp; 3</h1>
+            <p>Progress during the second and third week of the coding period</p>
+            <div class="article-list-footer">
+  <span class="article-list-date">
+    June 22, 2020
+  </span>
+  <span class="article-list-divider">-</span>
+  <span class="article-list-minutes">
+    
+    
+      4 minute read
+    
+  </span>
+  <span class="article-list-divider">-</span>
+  <div class="article-list-tags">
+    
+      
+      <a href="/tag/gsoc" title="See all posts with tag 'GSoC 2020'">GSoC 2020</a>
+    
+      
+      <a href="/tag/kde" title="See all posts with tag 'KDE'">KDE</a>
+    
+  </div>
+</div>
+          </header>
+
+          <div class="article-content">
+            <h1 id="gsoc-2020-with-kde">GSoC 2020 with KDE</h1>
+
+<p>Greetings Reader,</p>
+
+<p>The coding period began on June 1st. As listed in the previous post, the plan for the first phase is to
+complete the following tasks:</p>
+<ul>
+  <li>A script that generates the SQLite DB using blz datafile downloaded from the  <a href="https://www.bundesbank.de/de/aufgaben/unbarer-zahlungsverkehr/serviceangebot/bankleitzahlen/download-bankleitzahlen-602592" title="Deutsche Bundesbank" rel="noreferrer noopener" target="_blank">Deutsche Bundesbank</a> <img class="emoji" title=":heavy_check_mark:" alt=":heavy_check_mark:" src="https://github.githubassets.com/images/icons/emoji/unicode/2714.png" height="20" width="20">
+</li>
+  <li>Modifications in the CMake build system to call this script at build time. <img class="emoji" title=":heavy_check_mark:" alt=":heavy_check_mark:" src="https://github.githubassets.com/images/icons/emoji/unicode/2714.png" height="20" width="20">
+</li>
+  <li>Replacing the part of code that uses the text datafile with the code that reads from this database.</li>
+  <li>Updating tests, documentations and benchmark to work with the new database.</li>
+  <li>Modifying the command-line tool to enable support for user-supplied database.</li>
+</ul>
+
+<p>The ticked tasks have been completed till now.</p>
+
+<h2 id="week-2">Week 2</h2>
+
+<p>This week, my main aim was to link the SQLite library to use it in the code and start replacing some
+of the code that does reading from the text file.</p>
+
+<p>Since, I did not have any previous experience with CMake
+build system, the linking part was a bit of a work. I carefully studied the existing build system to
+figure out how to achieve this. I looked up some of the examples on the internet and tried to fill in the
+gaps from my intuition. <br>
+Finally, victory! The CMake command ran successfully and the test source file
+executed the SQLite APIs. <br></p>
+
+<p>With that done, now I was ready to write some <strong>C++</strong>.</p>
+
+<h2 id="week-3">Week 3</h2>
+
+<p>For this, I established the following flow. When the constructor is called,
+it checks the <strong>bankdata_dir</strong> path to see if the database is present.
+If it is, it calls the method</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">void</span> <span class="n">AccountNumberCheck</span><span class="o">::</span><span class="n">readFile</span><span class="p">(</span><span class="k">const</span> <span class="n">string</span> <span class="o">&amp;</span><span class="n">filename</span><span class="p">)</span></code></pre></figure>
+
+<p>with the filename. This method establishes the connection with the database and executes a SELECT
+query using <strong>sqlite3_exec()</strong>.</p>
+
+<p>Now, there was a problem here.</p>
+
+<p>The <strong>sqlite3_exec()</strong> calls a <strong>static</strong> function at every row of the result obtained from the query passed.
+But, I needed to use the results to insert new <strong>Record</strong> in the std::map <strong>data</strong>, which will be used
+for all the checking and finding of bank accounts. But since, these are <strong>members</strong> of the class, they cannot
+be accessed through a static function.</p>
+
+<p>After spending a bit of time searching for a solution, I stumbled upon a way that was helpful.
+The trick was to pass the pointer to the current object into the static callback function which will
+cast it into the class pointer and call the required non-static method.
+So, the callback function looks like this:</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">int</span>
+<span class="n">AccountNumberCheck</span><span class="o">::</span><span class="n">callback</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="n">objPtr</span><span class="p">,</span> <span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span><span class="n">argv</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span><span class="n">azColName</span><span class="p">){</span>
+    <span class="k">return</span> <span class="p">((</span><span class="n">AccountNumberCheck</span> <span class="o">*</span><span class="p">)</span><span class="n">objPtr</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">readDatabase</span><span class="p">(</span><span class="n">argv</span><span class="p">);</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>The method <strong>AccountNumberCheck::readFile()</strong> used to read from the text file; I modified it
+to read from the database.</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">int</span>
+<span class="n">AccountNumberCheck</span><span class="o">::</span><span class="n">readDatabase</span><span class="p">(</span><span class="kt">char</span> <span class="o">**</span><span class="n">argv</span><span class="p">){</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">isEntryValidToday</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">6</span><span class="p">])){</span>
+        <span class="kt">char</span> <span class="o">*</span><span class="n">blz</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span><span class="p">[</span><span class="n">BLZ_SIZE</span> <span class="n">PLUSONE</span><span class="p">];</span>
+        <span class="kt">char</span> <span class="o">*</span><span class="n">method</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span><span class="p">[</span><span class="n">METHOD_SIZE</span> <span class="n">PLUSONE</span><span class="p">];</span>
+        <span class="kt">char</span> <span class="o">*</span><span class="n">name</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span><span class="p">[</span><span class="n">NAME_SIZE</span> <span class="n">PLUSONE</span><span class="p">];</span>
+        <span class="kt">char</span> <span class="o">*</span><span class="n">place</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span><span class="p">[</span><span class="n">PLACE_SIZE</span> <span class="n">PLUSONE</span><span class="p">];</span>
+
+        <span class="n">memcpy</span><span class="p">(</span><span class="n">blz</span><span class="p">,</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">BLZ_SIZE</span><span class="p">);</span>
+        <span class="n">memcpy</span><span class="p">(</span><span class="n">method</span><span class="p">,</span><span class="n">argv</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span><span class="n">METHOD_SIZE</span><span class="p">);</span>
+        <span class="n">memcpy</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="n">argv</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span><span class="n">NAME_SIZE</span><span class="p">);</span>
+        <span class="n">memcpy</span><span class="p">(</span><span class="n">place</span><span class="p">,</span><span class="n">argv</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span><span class="n">PLACE_SIZE</span><span class="p">);</span>
+
+        <span class="n">Record</span><span class="o">*</span> <span class="n">newRecord</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Record</span><span class="p">(</span><span class="n">blz</span><span class="p">,</span><span class="n">method</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="n">place</span><span class="p">);</span> <span class="c1">// Create new record</span>
+        <span class="n">data</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">banklist_type</span><span class="o">::</span><span class="n">value_type</span><span class="p">(</span><span class="n">newRecord</span><span class="o">-&gt;</span><span class="n">bankId</span><span class="p">,</span> <span class="n">newRecord</span><span class="p">));</span>
+
+        <span class="k">delete</span><span class="p">[]</span> <span class="n">blz</span><span class="p">;</span>
+        <span class="k">delete</span><span class="p">[]</span> <span class="n">method</span><span class="p">;</span>
+        <span class="k">delete</span><span class="p">[]</span> <span class="n">name</span><span class="p">;</span>
+        <span class="k">delete</span><span class="p">[]</span> <span class="n">place</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>Here, the <strong>isEntryValidToday()</strong> method is used to compare the value of <strong>valid_upto</strong> field with today’s
+date.</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="k">static</span> <span class="kt">bool</span> <span class="nf">isEntryValidToday</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">valid_upto</span><span class="p">){</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">valid_upto</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="kt">time_t</span> <span class="n">now</span> <span class="o">=</span> <span class="n">time</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="k">struct</span> <span class="nc">tm</span> <span class="n">t_struct</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">today</span><span class="p">[</span><span class="mi">20</span><span class="p">];</span>
+    <span class="n">t_struct</span> <span class="o">=</span> <span class="o">*</span><span class="n">localtime</span><span class="p">(</span><span class="o">&amp;</span><span class="n">now</span><span class="p">);</span>
+    <span class="n">strftime</span><span class="p">(</span><span class="n">today</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">today</span><span class="p">),</span> <span class="s">"%Y-%m-%d"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">t_struct</span><span class="p">);</span>
+
+    <span class="k">if</span><span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">today</span><span class="p">,</span><span class="n">valid_upto</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+
+    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>The SELECT query that I passed, extracts the date in the format <strong>YYYY-MM-DD</strong> so to compare it with today,
+I formatted today’s date in the same format, after which they could be compared simply using <strong>strcmp()</strong>.</p>
+
+<p>After a few more additions and changes, the code was successfully reading from the database and working well
+with the tests. However, the CTest <strong>benchmark</strong> fails due to incompatibility with the new code.
+So, next week’s plan is to fix this and make changes to the command-line tool to enable support for user-supplied
+database.</p>
+
+<p>See you in the next post.</p>
+
+<p><img class="emoji" title=":wave:" alt=":wave:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f44b.png" height="20" width="20"><br>
+Prasun.</p>
+
+
+          </div>
+          <div class="article-share">
+            
+            
+            <a href="https://twitter.com/home?status=GSoC'20+progress+:+Week+2+&amp;+3%20-%20http://prasunka.github.io/posts/gsoc2020-week-2-3%20by%20@_prasunkr_" title="Share on Twitter" rel="noreferrer noopener" target="_blank">
+              <svg viewbox="0 0 512 512"><path d="M492 109.5c-17.4 7.7-36 12.9-55.6 15.3 20-12 35.4-31 42.6-53.6 -18.7 11.1-39.4 19.2-61.5 23.5C399.8 75.8 374.6 64 346.8 64c-53.5 0-96.8 43.4-96.8 96.9 0 7.6 0.8 15 2.5 22.1 -80.5-4-151.9-42.6-199.6-101.3 -8.3 14.3-13.1 31-13.1 48.7 0 33.6 17.2 63.3 43.2 80.7C67 210.7 52 206.3 39 199c0 0.4 0 0.8 0 1.2 0 47 33.4 86.1 77.7 95 -8.1 2.2-16.7 3.4-25.5 3.4 -6.2 0-12.3-0.6-18.2-1.8 12.3 38.5 48.1 66.5 90.5 67.3 -33.1 26-74.9 41.5-120.3 41.5 -7.8 0-15.5-0.5-23.1-1.4C62.8 432 113.7 448 168.3 448 346.6 448 444 300.3 444 172.2c0-4.2-0.1-8.4-0.3-12.5C462.6 146 479 129 492 109.5z"></path></svg>
+            </a>
+            <a href="https://www.facebook.com/sharer/sharer.php?u=http://prasunka.github.io/posts/gsoc2020-week-2-3" title="Share on Facebook" rel="noreferrer noopener" target="_blank">
+              <svg viewbox="0 0 512 512"><path d="M288 192v-38.1c0-17.2 3.8-25.9 30.5-25.9H352V64h-55.9c-68.5 0-91.1 31.4-91.1 85.3V192h-45v64h45v192h83V256h56.4l7.6-64H288z"></path></svg>
+            </a>
+          </div>
+
+          
+        </article>
+        <footer class="footer ">
+  <p>
+    © 2020 Prasun Kumar    |   Powered by <a href="https://github.com/nielsenramon/chalk" rel="noreferrer noopener" target="_blank" title="Chalk">Chalk</a>.
+  </p>
+</footer>
+
+      </div>
+    </div>
+  </main>
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-170264271-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-170264271-1');
+  </script>
+
+
+<script src="/assets/vendor-130c9c254effc51f3283620bc635851da7b99c20901216948f11ba72ee13317f.js" type="text/javascript"></script>
+
+
+  <script src="/assets/webfonts-96493456d319d1bf419afdf8701552d4d486fee6afd304897d4fd81eb4e0cc0b.js" type="text/javascript"></script>
+
+
+
+
+<script src="/assets/application-cfde13ac81ddaf4351b2e739603e2baf688d0fcc9aba613fe62bbb1c7b037fb9.js" type="text/javascript"></script>
+
+
+  <script src="/assets/themetoggle-df0d3d73164dc26dffbd630182ae4d0dfa7bee6b694a2b5d565d73595b582bbf.js" type="text/javascript"></script>
+
+</body>
+</html>

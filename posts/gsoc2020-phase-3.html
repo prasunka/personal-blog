@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>PBytes | GSoC'20 progress : Phase III</title>
+  <meta name="description" content="Work progress during the final phase of Google Summer of Code">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="GSoC&#39;20 progress : Phase III">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="http://prasunka.github.io/posts/gsoc2020-phase-3">
+  <meta property="og:description" content="Work progress during the final phase of Google Summer of Code">
+  <meta property="og:site_name" content="PBytes">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:url" content="http://prasunka.github.io/posts/gsoc2020-phase-3">
+  <meta name="twitter:title" content="GSoC&#39;20 progress : Phase III">
+  <meta name="twitter:description" content="Work progress during the final phase of Google Summer of Code">
+
+  
+    <meta property="og:image" content="http://prasunka.github.io/assets/og-image-ee46bbc61b334e821e81534b1fd43f3fee6f020ec174b3c2114445695fd48c01.jpg">
+    <meta name="twitter:image" content="http://prasunka.github.io/assets/og-image-ee46bbc61b334e821e81534b1fd43f3fee6f020ec174b3c2114445695fd48c01.jpg">
+  
+
+  <link href="http://prasunka.github.io/feed.xml" type="application/rss+xml" rel="alternate" title="PBytes Last 10 blog posts" />
+
+  
+
+  
+
+    
+      <link rel="icon" type="image/x-icon" href="/assets/favicon-92c496ca24aae9e64ca0b4505a39a0b8267a63c9992fe307ff5047aca4e8b720.ico">
+      <link rel="apple-touch-icon" href="/assets/apple-touch-icon-dark-d161409442b7e523089f24d08d0a55951549ece7504207c376d53b020713494d.png">
+      <link rel="stylesheet" type="text/css" title="light" id="light" href="/assets/light-fcb7a108ad86f7ba6e488841f0a6dfc46758d026e79cfa24fd59bb0be52e96f8.css">
+      <link rel="stylesheet" type="text/css" title="dark" id="dark" href="/assets/dark-9e48b67b0791dd42634fc1806ebcfe4a6f9740554bbcdf992e21bd0fdbd5395d.css" disabled="false">
+    
+
+  
+
+</head>
+
+<body>
+  <main>
+    <div class="grid grid-centered">
+      <div class="grid-cell">
+        <nav class="header-nav ">
+  <a href="/" class="header-logo" title="PBytes">PBytes</a>
+  <ul class="header-links">
+    
+      <li>
+        <a href="/about" title="About me">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon-about">
+  <use href="/assets/about-ecf154b571ab8034ae00aeed91a3b7ad68db80b46d958753ad6216c919486e88.svg#icon-about" xlink:href="/assets/about-ecf154b571ab8034ae00aeed91a3b7ad68db80b46d958753ad6216c919486e88.svg#icon-about"></use>
+</svg>
+
+        </a>
+      </li>
+    
+    
+      <li>
+        <a href="https://twitter.com/_prasunkr_" rel="noreferrer noopener" target="_blank" title="Twitter">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon-twitter">
+  <use href="/assets/twitter-8842c33965263ad1b03a978406826677a668f94125d5837e70ab83f24b3213a7.svg#icon-twitter" xlink:href="/assets/twitter-8842c33965263ad1b03a978406826677a668f94125d5837e70ab83f24b3213a7.svg#icon-twitter"></use>
+</svg>
+
+        </a>
+      </li>
+    
+    
+    
+    
+      <li>
+        <a href="https://github.com/prasunka" rel="noreferrer noopener" target="_blank" title="GitHub">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon-github">
+  <use href="/assets/github-094f81040819f34343ee6ffff0980f17e2807b08b595eaaf66ae3554934fd78d.svg#icon-github" xlink:href="/assets/github-094f81040819f34343ee6ffff0980f17e2807b08b595eaaf66ae3554934fd78d.svg#icon-github"></use>
+</svg>
+
+        </a>
+      </li>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+      <li>
+        <a href="mailto:prasun.code@gmail.com" title="Email">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon-email">
+  <use href="/assets/email-782473193bf750036fdb90e8daa075508a20509d01854c09f3237c144a3f0601.svg#icon-email" xlink:href="/assets/email-782473193bf750036fdb90e8daa075508a20509d01854c09f3237c144a3f0601.svg#icon-email"></use>
+</svg>
+
+        </a>
+      </li>
+    
+    
+      <li>
+        <a href="/feed.xml" rel="noreferrer noopener" target="_blank" title="RSS">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon-rss">
+  <use href="/assets/rss-541ec5cea9cefd10d2fcfec01888f3f231a8829940249835fa7b7b3a12ae0d0d.svg#icon-rss" xlink:href="/assets/rss-541ec5cea9cefd10d2fcfec01888f3f231a8829940249835fa7b7b3a12ae0d0d.svg#icon-rss"></use>
+</svg>
+
+        </a>
+      </li>
+    
+    
+      <li>
+        <a onclick="toggle()" title="Toggle Theme">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon-theme">
+  <use href="/assets/theme-66869e0bf8dab34bae1c86bda400327b772e0be69e8dc28d3ede896e771320ed.svg#icon-theme" xlink:href="/assets/theme-66869e0bf8dab34bae1c86bda400327b772e0be69e8dc28d3ede896e771320ed.svg#icon-theme"></use>
+</svg>
+
+        </a>
+      </li>
+    
+  </ul>
+</nav>
+
+
+
+        <article class="article ">
+          <header class="article-header">
+            <h1>GSoC'20 progress : Phase III</h1>
+            <p>Work progress during the final phase of Google Summer of Code</p>
+            <div class="article-list-footer">
+  <span class="article-list-date">
+    August 30, 2020
+  </span>
+  <span class="article-list-divider">-</span>
+  <span class="article-list-minutes">
+    
+    
+      4 minute read
+    
+  </span>
+  <span class="article-list-divider">-</span>
+  <div class="article-list-tags">
+    
+      
+      <a href="/tag/gsoc" title="See all posts with tag 'GSoC 2020'">GSoC 2020</a>
+    
+      
+      <a href="/tag/kde" title="See all posts with tag 'KDE'">KDE</a>
+    
+  </div>
+</div>
+          </header>
+
+          <div class="article-content">
+            <h2 id="gsoc-2020-with-kde">GSoC 2020 with KDE</h2>
+
+<p>Greetings Reader,</p>
+
+<p>And just like that, the third evaluations for <strong>Google Summer of Code</strong> are upon
+us. It seems just like yesterday when I began my work on this project and now the
+final phase is about to be over. Sort of unbelievable.</p>
+
+<p>Here is the work report for the final phase.</p>
+
+<h2 id="work-report">Work Report</h2>
+
+<p>This month was marked with various readjustments in the previous work done based on
+the code review from my mentors and finalising the code for the next release:</p>
+
+<ul>
+  <li>
+    <h4 id="changed-the-type-of-bankid-member-of-class-record-from-unsigned-long-to-stdstring">Changed the type of <code class="highlighter-rouge">bankId</code> member of class <strong>Record</strong> from unsigned long to <code class="highlighter-rouge">std::string</code>
+</h4>
+    <p>That sounds very trivial but it’s actually a bit of work. So, the problem originates due to Netherlands’
+Bank Identifier Code(BIC) specification. According to the <a href="https://www.ecb.europa.eu/paym/integration/retail/sepa/iban/shared/pdf/iban_registry.pdf" title="IBAN format registry" rel="noreferrer noopener" target="_blank">IBAN format registry</a> Netherland’s BIC has a specification of <code class="highlighter-rouge">4!a</code> which loosely translates to 4 exactly Uppercase letters.
+However, the Record class handled <code class="highlighter-rouge">bankId</code> using <code class="highlighter-rouge">unsigned long</code> and all the methods were written with that in mind.
+Since, <code class="highlighter-rouge">bankId</code> is part of the public <strong>API</strong>, it had to be ensured that no dependent client is affected by this change.<br><br>
+Related Commit:</p>
+    <ul>
+      <li><a href="https://sourceforge.net/u/prasun/ktoblzcheck-gsoc2020/ci/515032ba63016870085770f822a20d94fbd3dbae/" title="Changed bankID type from unsigned long to std::string to accomodate Netherlands records" rel="noreferrer noopener" target="_blank">Changed bankID type from unsigned long to std::string to accomodate Netherlands records</a></li>
+    </ul>
+  </li>
+  <li>
+    <h4 id="added-methods-for-validation-of-accountid-and-bankid-for-netherlands-and-switzerland">Added methods for validation of <code class="highlighter-rouge">accountId</code> and <code class="highlighter-rouge">bankId</code> for Netherlands and Switzerland</h4>
+    <p>Till now, the only checks for these countries were rudimentary length checks which didn’t cover the whole
+specification. So, two new methods, <code class="highlighter-rouge">method_4ea_10en</code> and <code class="highlighter-rouge">method_5en_12ec</code>, were added to <strong>methods.cc</strong>
+to handle Dutch and Swiss entries.<br><br>
+Related Commit:</p>
+    <ul>
+      <li><a href="https://sourceforge.net/u/prasun/ktoblzcheck-gsoc2020/ci/0db94d6a68f182939adb2214c6d32408f5ebdd27/" title="Added methods for validation of Nethelands and Switzerland's entries" rel="noreferrer noopener" target="_blank">Added methods for validation of Nethelands and Switzerland’s entries</a></li>
+    </ul>
+  </li>
+  <li>
+    <h4 id="added-tests-for-newly-added-validation-methods-and-for-uncovered-german-return-values">Added tests for newly added validation methods and for uncovered German return values</h4>
+    <p>Some tests were added to ensure I’m not breaking things with every commit.<br><br>
+Related Commit:</p>
+    <ul>
+      <li><a href="https://sourceforge.net/u/prasun/ktoblzcheck-gsoc2020/ci/8f95a74db6146d07a1126ee84e803d6521ac6891/" title="Added tests" rel="noreferrer noopener" target="_blank">Added tests</a></li>
+    </ul>
+  </li>
+  <li>
+    <h4 id="mark-the-now-redundant-and-unusable-methods-of-the-public-api-as-deprecated-and-removing-members-not-part-of-the-public-api">Mark the now redundant and unusable methods of the public API as deprecated and removing members not part of the public API</h4>
+    <p>Due to the shift from the text datafiles to SQLite databases, many of the methods of the public API were now unusable or
+made no sense in the new code. To provide compatibility, the method definitions were modified and the methods were themselves
+marked <code class="highlighter-rouge">DEPRECATED</code> using macros. The redundant methods and members which were not public, were removed.<br><br>
+Related Commits:</p>
+    <ul>
+      <li><a href="https://sourceforge.net/u/prasun/ktoblzcheck-gsoc2020/ci/f8f8e8facc6dd9c77d3fe1369348c883bd4c0916/" title="Deprecated dataValidStartDate() and dataValidEndDate()" rel="noreferrer noopener" target="_blank">Deprecated <code class="highlighter-rouge">dataValidStartDate()</code> and <code class="highlighter-rouge">dataValidEndDate()</code></a></li>
+      <li><a href="https://sourceforge.net/u/prasun/ktoblzcheck-gsoc2020/ci/945056da233b2fab3ef758d10148baf0b879666f/" title="Deprecated dataValidStartDate() and dataValidEndDate()" rel="noreferrer noopener" target="_blank">Deprecated <code class="highlighter-rouge">isDataValidForDate()</code> and <code class="highlighter-rouge">isValidDataAvailable()</code></a></li>
+      <li><a href="https://sourceforge.net/u/prasun/ktoblzcheck-gsoc2020/ci/36f3c86951e33f61dee245a4f2dedb4b6b4e96f5/" title="Removed dated_files iteration from isValidDataAvailable()" rel="noreferrer noopener" target="_blank">Removed dated_files iteration from <code class="highlighter-rouge">isValidDataAvailable()</code></a></li>
+      <li><a href="https://sourceforge.net/u/prasun/ktoblzcheck-gsoc2020/ci/ca92093f7544b3282f044075a30644ba10feeb1b/" title="Deprecated closestValidData()" rel="noreferrer noopener" target="_blank">Deprecated <code class="highlighter-rouge">closestValidData()</code></a></li>
+      <li><a href="https://sourceforge.net/u/prasun/ktoblzcheck-gsoc2020/ci/5adeab9bf93006cb06e367e6a86710ea469e656c/" title="Deprecated loadDataForDate() and getFilenameClosestDateToday() and removed dated_files references" rel="noreferrer noopener" target="_blank">Deprecated <code class="highlighter-rouge">loadDataForDate()</code> and <code class="highlighter-rouge">getFilenameClosestDateToday()</code> and removed <code class="highlighter-rouge">dated_files</code> references</a></li>
+      <li><a href="https://sourceforge.net/u/prasun/ktoblzcheck-gsoc2020/ci/c3fb262b40dcbfdbd11ad61f418a22920f6b71fc/" title="Removed dated_file and all related methods" rel="noreferrer noopener" target="_blank">Removed <code class="highlighter-rouge">dated_file</code> and all related methods</a></li>
+    </ul>
+  </li>
+  <li>
+    <h4 id="adding-an-api-for-downloading-databases-from-projects-website-for-updating-data-files">Adding an API for downloading databases from project’s website for updating data files</h4>
+    <p>I have added a working prototype for the API. Some work is required on the server side after which I would be able
+to enable it for usage. I am working on this on a separate branch <code class="highlighter-rouge">downloadapi-dev</code>.<br><br>
+Related Commits:</p>
+    <ul>
+      <li><a href="https://sourceforge.net/u/prasun/ktoblzcheck-gsoc2020/ci/18cabea71bdf654c753246616edaa80bc5443011/" title="Added Class DataUpdater and its definitions" rel="noreferrer noopener" target="_blank">Added Class <strong>DataUpdater</strong> and its definitions</a></li>
+      <li><a href="https://sourceforge.net/u/prasun/ktoblzcheck-gsoc2020/ci/92f6c107fa94a3a79b87ab72b0b7b32451401984/" title="Added updater executable" rel="noreferrer noopener" target="_blank">Added updater executable</a></li>
+      <li><a href="https://sourceforge.net/u/prasun/ktoblzcheck-gsoc2020/ci/c813dd7bfa4962b0f77bb6336c7b2b08fafb5165/" title="Added documentation for the updater API" rel="noreferrer noopener" target="_blank">Added documentation for the updater API</a></li>
+    </ul>
+  </li>
+</ul>
+
+<p>So, those were the major work done in this phase. There are a lot of small additions and deletions which are pretty self-
+explanatory. You can see them in the <a href="https://sourceforge.net/u/prasun/ktoblzcheck-gsoc2020/commit_browser" title="commit browser" rel="noreferrer noopener" target="_blank"> commit_browser </a> at my <a href="https://sourceforge.net/u/prasun/ktoblzcheck-gsoc2020/" title="development fork" rel="noreferrer noopener" target="_blank">development fork</a>.</p>
+
+<h2 id="the-road-ahead">The Road Ahead</h2>
+
+<p>With this, my journey of <strong>GSoC</strong> takes a rest but in turn begins my wonderful journey of open-source development. Proud to say, I am hooked :)</p>
+
+<p>First of all, I have to get this code merged for the next release so that it sees actual users. Then the APIs need to be worked out and tested with actual databases before release. So, the first few days after <strong>GSoC</strong> are gonna be busy.</p>
+
+<p>From then on, I will be an active contributor to the <strong>KtoBlzCheck</strong> project and explore the other projects of the <strong>KDE community</strong>.
+This community has always been supportive and my mentors have enabled me to learn a lot. Thank you all very much.</p>
+
+<p>See you in the next post.</p>
+
+<p><img class="emoji" title=":wave:" alt=":wave:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f44b.png" height="20" width="20"><br>
+Prasun.</p>
+
+          </div>
+          <div class="article-share">
+            
+            
+            <a href="https://twitter.com/home?status=GSoC'20+progress+:+Phase+III%20-%20http://prasunka.github.io/posts/gsoc2020-phase-3%20by%20@_prasunkr_" title="Share on Twitter" rel="noreferrer noopener" target="_blank">
+              <svg viewbox="0 0 512 512"><path d="M492 109.5c-17.4 7.7-36 12.9-55.6 15.3 20-12 35.4-31 42.6-53.6 -18.7 11.1-39.4 19.2-61.5 23.5C399.8 75.8 374.6 64 346.8 64c-53.5 0-96.8 43.4-96.8 96.9 0 7.6 0.8 15 2.5 22.1 -80.5-4-151.9-42.6-199.6-101.3 -8.3 14.3-13.1 31-13.1 48.7 0 33.6 17.2 63.3 43.2 80.7C67 210.7 52 206.3 39 199c0 0.4 0 0.8 0 1.2 0 47 33.4 86.1 77.7 95 -8.1 2.2-16.7 3.4-25.5 3.4 -6.2 0-12.3-0.6-18.2-1.8 12.3 38.5 48.1 66.5 90.5 67.3 -33.1 26-74.9 41.5-120.3 41.5 -7.8 0-15.5-0.5-23.1-1.4C62.8 432 113.7 448 168.3 448 346.6 448 444 300.3 444 172.2c0-4.2-0.1-8.4-0.3-12.5C462.6 146 479 129 492 109.5z"></path></svg>
+            </a>
+            <a href="https://www.facebook.com/sharer/sharer.php?u=http://prasunka.github.io/posts/gsoc2020-phase-3" title="Share on Facebook" rel="noreferrer noopener" target="_blank">
+              <svg viewbox="0 0 512 512"><path d="M288 192v-38.1c0-17.2 3.8-25.9 30.5-25.9H352V64h-55.9c-68.5 0-91.1 31.4-91.1 85.3V192h-45v64h45v192h83V256h56.4l7.6-64H288z"></path></svg>
+            </a>
+          </div>
+
+          
+        </article>
+        <footer class="footer ">
+  <p>
+    © 2020 Prasun Kumar    |   Powered by <a href="https://github.com/nielsenramon/chalk" rel="noreferrer noopener" target="_blank" title="Chalk">Chalk</a>.
+  </p>
+</footer>
+
+      </div>
+    </div>
+  </main>
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-170264271-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-170264271-1');
+  </script>
+
+
+<script src="/assets/vendor-130c9c254effc51f3283620bc635851da7b99c20901216948f11ba72ee13317f.js" type="text/javascript"></script>
+
+
+  <script src="/assets/webfonts-96493456d319d1bf419afdf8701552d4d486fee6afd304897d4fd81eb4e0cc0b.js" type="text/javascript"></script>
+
+
+
+
+<script src="/assets/application-cfde13ac81ddaf4351b2e739603e2baf688d0fcc9aba613fe62bbb1c7b037fb9.js" type="text/javascript"></script>
+
+
+  <script src="/assets/themetoggle-df0d3d73164dc26dffbd630182ae4d0dfa7bee6b694a2b5d565d73595b582bbf.js" type="text/javascript"></script>
+
+</body>
+</html>
